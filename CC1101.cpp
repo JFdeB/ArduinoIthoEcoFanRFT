@@ -262,7 +262,11 @@ bool CC1101::sendData(CC1101Packet *packet)
     }
   }
   // while ((readRegisterWithSyncProblem(CC1101_MARCSTATE, CC1101_STATUS_REGISTER) & CC1101_BITS_MARCSTATE) != CC1101_MARCSTATE_IDLE);
-  do  MarcState = (readRegisterWithSyncProblem(CC1101_MARCSTATE, CC1101_STATUS_REGISTER) & CC1101_BITS_MARCSTATE);
+  do
+  {
+     MarcState = (readRegisterWithSyncProblem(CC1101_MARCSTATE, CC1101_STATUS_REGISTER) & CC1101_BITS_MARCSTATE);
+     if (MarcState == CC1101_MARCSTATE_TXFIFO_UNDERFLOW) debug.serOut("TXFIFO_UNDERFLOW occured in sendData() \n");
+  }
   while((MarcState != CC1101_MARCSTATE_IDLE) && (MarcState != CC1101_MARCSTATE_TXFIFO_UNDERFLOW));
 }
 
